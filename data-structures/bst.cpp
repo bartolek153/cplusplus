@@ -37,7 +37,7 @@ private:
   void destroyTree(node *);
   bool isLeaf(node *);
   int getDepth(node *);
-  int getLength(node*);
+  int getLength(node *);
   node *findMin(node *);
   node *findMax(node *);
 
@@ -269,9 +269,11 @@ void BST::prettyPrint(node *root, const string &prefix) {
 //
 node *BST::getRoot() { return root; }
 
-int BST::getDepth() { return getDepth(root); }
+int BST::getDepth() {
+  return getDepth(root);
+} // returns the depth of the entire tree
 
-int BST::getDepth(node *n) {
+int BST::getDepth(node *n) { // return the depth of a node
   // the depth of a node is the distance from the root
   if (n == NULL)
     return 0;
