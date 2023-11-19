@@ -36,7 +36,7 @@ private:
   // auxiliary methods
   void destroyTree(node *);
   bool isLeaf(node *);
-  int getDepth(node *);
+  int maxDepth(node *);
   int getLength(node *);
   node *findMin(node *);
   node *findMax(node *);
@@ -54,7 +54,7 @@ public:
   void prettyPrint(node *, const string &);
 
   node *getRoot();
-  int getDepth();
+  int maxDepth();
   int getLength();
 };
 
@@ -88,7 +88,7 @@ node *BST::insert(node *parent, int data) {
     }
 
   } else { // new leaf at right
-           //
+
     if (parent->right != NULL)
       return insert(parent->right, data);
     else { // only root is created
@@ -165,7 +165,7 @@ node *BST::search(node *parent, int data) {
 // displaying
 //
 void BST::print() {
-  cout << "\nTree Depth: " << getDepth();
+  cout << "\nTree Depth: " << maxDepth();
 
   cout << "\nTree Length: " << getLength();
 
@@ -269,17 +269,17 @@ void BST::prettyPrint(node *root, const string &prefix) {
 //
 node *BST::getRoot() { return root; }
 
-int BST::getDepth() {
-  return getDepth(root);
+int BST::maxDepth() {
+  return maxDepth(root);
 } // returns the depth of the entire tree
 
-int BST::getDepth(node *n) { // return the depth of a node
+int BST::maxDepth(node *n) { // return the depth of a node
   // the depth of a node is the distance from the root
   if (n == NULL)
     return 0;
 
-  int leftDepth = getDepth(n->left);
-  int rightDepth = getDepth(n->right);
+  int leftDepth = maxDepth(n->left);
+  int rightDepth = maxDepth(n->right);
 
   return max(leftDepth, rightDepth) + 1;
 }
