@@ -9,16 +9,17 @@ struct node {
 
 // node "constructor" definitions
 node *initNode(int key) {
-  node *result = new node;
-  result->data = key;
-  result->next = nullptr;
+  node *n = new node;
+  n->data = key;
+  n->next = nullptr;
 
-  return result;
+  return n;
 }
 
 class LinkedList {
   node *head;
   node *searchRecursive(node *, int);
+  void destroyList(node *);
 
 public:
   LinkedList();
@@ -28,9 +29,12 @@ public:
   node *push(int);
   node *append(int);
   node *insertAfter(int, node *);
+  void remove(int);
 
   node *searchIterative(int);
   node *searchRecursive(int);
+
+  int getLength();
 
   void prettyPrint();
 };
@@ -38,6 +42,11 @@ public:
 // Singly Linked List constructor definition
 LinkedList::LinkedList() : head(nullptr) {}
 LinkedList::LinkedList(int data) { head = initNode(data); }
+
+LinkedList::~LinkedList() {
+  destroyList(head);
+  cout << "\nThe list was destroyed\n";
+}
 
 //
 // data manipulation
@@ -91,6 +100,48 @@ node *LinkedList::append(int newData) {
   return newNode;
 }
 
+void LinkedList::remove(int offset) {
+  // deletes element in the given position
+  // and return the deleted element
+
+  if (head == NULL) {
+    cout << "The list is empty\n";
+    return;
+  }
+
+  int len = getLength();
+
+  if (offset >= len || len < 0) {
+    cout << "Index out of bounds\n";
+    return;
+  }
+
+  // iterator variable
+  node *aux = head;
+
+  // the auxiliar variable that stores
+  // the address of the node to
+  // be deleted
+  node *deleted = head;
+
+  if (offset == 0) {
+    deleted = head;
+    head = head->next;
+    delete deleted;
+    return;
+  }
+
+  while (offset-- > 0) {
+    aux = deleted;
+    deleted = deleted->next;
+  }
+
+  aux->next = deleted->next;
+  delete deleted;
+
+  return;
+}
+
 //
 // searching
 //
@@ -116,7 +167,8 @@ node *LinkedList::searchRecursive(node *current, int data) {
   }
 
   if (current->data == data) {
-    printf("Found node(%d) recursively: [%d|%p]\n", current->data, current->data, current);
+    printf("Found node(%d) recursively: [%d|%p]\n", current->data,
+           current->data, current);
     return current;
   }
 
@@ -136,8 +188,6 @@ void LinkedList::prettyPrint() {
     return;
   }
 
-  int indexCount = 1;
-
   cout << endl << "HEAD\n";
   cout << "[" << temp->data << "]";
   temp = temp->next;
@@ -147,15 +197,34 @@ void LinkedList::prettyPrint() {
     cout << "->"
          << "[" << temp->data << "]";
     temp = temp->next;
-    indexCount++;
   }
 
   cout << endl << endl;
-  printf("Found %d elements.\n", indexCount);
+  printf("Found %d elements.\n", getLength());
+}
+
+//
+// other methods
+//
+int LinkedList::getLength() {
+  int len = 0;
+
+  for (node *i = head; i != NULL; i = i->next)
+    len++;
+
+  return len;
+}
+
+void LinkedList::destroyList(node* n) {
+  if (n == nullptr)
+    return;
+  
+  destroyList(n->next);
+  delete n;
 }
 
 int main() {
-  cout << "=======\n Singly Linked List \n=======\n";
+  cout << "\n=======\n Singly Linked List \n=======\n";
 
   LinkedList *list = new LinkedList(10);
 
@@ -167,12 +236,20 @@ int main() {
   node *foundRec = list->searchRecursive(10);
 
   if (found == foundRec)
-    cout << "The algorithms are working nice!";
+    cout << "The algorithms are working nice!\n";
+
+  list->insertAfter(0, found);
 
   list->append(30);
   list->append(40);
 
+  list->remove(0);
+  list->remove(1);
+  list->remove(5);
+
   list->prettyPrint();
+
+  delete list;
 
   return 0;
 }
