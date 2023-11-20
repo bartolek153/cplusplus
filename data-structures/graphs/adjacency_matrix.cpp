@@ -84,8 +84,9 @@ void AMGraph::prettyPrint() {
 
 int main() {
 
-  cout << "\n===========\n Graph (Adjacency Matrix)\n===========\n" << endl;
-  // cout << "time complexity: O(log n)\n" << endl;
+  cout << "\n===========\n Graph (Adjacency Matrix)\n===========\n";
+  cout << "time complexity: O(1)\n";
+  cout << "space complexity: O(n^2)\n" << endl;
 
   AMGraph *graph = new AMGraph(5);
 
